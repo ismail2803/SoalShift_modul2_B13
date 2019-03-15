@@ -82,10 +82,10 @@ menambahkan lokasi tujuan file pada nama file yang baru.
 strcat(foldertemp, fullname);
 strcpy(fullname, foldertemp);
 ```
-menambahkan lokasi asal file pada nama file yang akan di rename
-``` rename(fullname, newname); ```
-mengubah nama file menjadi nama file yang baru
-``` sleep(5); ```
+menambahkan lokasi asal file pada nama file yang akan di rename  
+``` rename(fullname, newname); ```  
+mengubah nama file menjadi nama file yang baru  
+``` sleep(5); ```  
 menjalankan setiap 5 detik
 ## Soal 2
 Pada suatu hari Kusuma dicampakkan oleh Elen karena Elen dimenangkan oleh orang lain. Semua kenangan tentang Elen berada pada file bernama “elen.ku” pada direktori “hatiku”. Karena sedih berkepanjangan, tugas kalian sebagai teman Kusuma adalah membantunya untuk menghapus semua kenangan tentang Elen dengan membuat program C yang bisa mendeteksi owner dan group dan menghapus file “elen.ku” setiap 3 detik dengan syarat ketika owner dan grupnya menjadi “www-data”. Ternyata kamu memiliki kendala karena permission pada file “elen.ku”. Jadi, ubahlah permissionnya menjadi 777. Setelah kenangan tentang Elen terhapus, maka Kusuma bisa move on.
@@ -110,11 +110,11 @@ mengubah file permission dari file elen.ku
 ```
 if((strcmp(pw->pw_name, "www-data") ==  0) && (strcmp(gr->gr_name, "www-data") ==  0))
 ``` 
-mengecek apakah owner dan group adalah "www-data"
-```remove(dir)```
-menghapus file jika memenuhi syarat sebelumnya
-``` sleep(3); ```
-menjalankan setiap 3 detik
+mengecek apakah owner dan group adalah "www-data"  
+```remove(dir)```  
+menghapus file jika memenuhi syarat sebelumnya  
+``` sleep(3); ```  
+menjalankan setiap 3 detik  
 
 ## Soal 3
 Diberikan file campur2.zip. Di dalam file tersebut terdapat folder “campur2”.  
@@ -229,9 +229,9 @@ FILE* fo;
 fo = fopen (namafile, "w+");
 fclose(fo);
 ```
-inisialiasi dan membuat file sesuai dengan namafile yang telah di dapatkan sebelumnya
-``` sleep(5); ```
-menjalankan setiap 5 detik
+inisialiasi dan membuat file sesuai dengan namafile yang telah di dapatkan sebelumnya  
+``` sleep(5); ```  
+menjalankan setiap 5 detik  
 
 ## Soal 5
 Kerjakan poin a dan b di bawah:
