@@ -61,13 +61,13 @@ char folder[100] = "/home/ismail/modul2/gambar/";
 char folderl[100] = "/home/ismail/Pictures/";
 d = opendir("/home/ismail/Pictures/");
 ```
-inisialisasi variabel yang dibutuhkan.
- ```while ((dir =  readdir(d)) !=  NULL)```
-mengecek setiap file yang ada dalam folder ("/home/ismail/Pictures")
-```ext =  strchr(fullname,'.');```
-mendapatkan ekstensi dari nama file. string setelah titik akan diambil
-``` if(strcmp(ekstensi, ".png") ==  0)```
-mengecek apakah ekstensi dari file tersebut adalah ".png"
+inisialisasi variabel yang dibutuhkan.  
+ ```while ((dir =  readdir(d)) !=  NULL)```  
+mengecek setiap file yang ada dalam folder ("/home/ismail/Pictures")  
+```ext =  strchr(fullname,'.');```  
+mendapatkan ekstensi dari nama file. string setelah titik akan diambil  
+``` if(strcmp(ekstensi, ".png") ==  0)```  
+mengecek apakah ekstensi dari file tersebut adalah ".png"  
 ```
 strcat(newname, grey);
 strcat(newname, ekstensi);
