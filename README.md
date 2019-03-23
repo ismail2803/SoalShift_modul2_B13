@@ -1,8 +1,60 @@
+
 [Soal 1](#soal-1)  
 [Soal 2](#soal-2)  
 [Soal 3](#soal-3)  
 [Soal 4](#soal-4)  
 [Soal 5](#soal-5)  
+
+#### Daemon
+```
+pid_t pid;
+pid = fork();
+
+if (pid < 0) {
+  exit(EXIT_FAILURE);
+}
+
+if (pid > 0) {
+
+  // simpan PID dari child proces
+
+  exit(EXIT_SUCCESS);
+}
+```
+menjalankan forking untuk membuat process baru dan parent process akan dimatikan. System akan mengira process telah selesai dan child proses akan melanjutkan program di background.
+```
+umask(0);
+```
+mode file diubah menggunakan umask untuk memastikan file dapat ditulis dan dibaca dengan benar.
+```
+sid = setsid();
+
+if (sid < 0) {
+  exit(EXIT_FAILURE);
+}
+```
+setsid() dijalankan agar child process memiliki SID unik yang berasal dari kernel agar prosesnya dapat berjalan.
+```
+if ((chdir("/")) < 0) {
+  exit(EXIT_FAILURE);
+}
+```
+direktori tempat daemon nantinya berjalan(dipastikan akan selalu ada).
+```
+close(STDIN_FILENO);
+close(STDOUT_FILENO);
+close(STDERR_FILENO);
+```
+menutup file descriptor standar karena daemon tidak menggunakan kendali terminal
+```
+while(1) {
+  // daemon program
+  sleep(30);
+}
+
+exit(EXIT_SUCCESS);
+```
+daemon bekerja terus menerus, sehingga dibutuhkan sebuah looping. program utama nomor 1, 2, 4, 5 akan ditulis disini
 
 ## Soal 1
 Elen mempunyai pekerjaan pada studio sebagai fotografer. Suatu hari ada seorang klien yang bernama Kusuma yang meminta untuk mengubah nama file yang memiliki ekstensi .png menjadi “[namafile]_grey.png”. Karena jumlah file yang diberikan Kusuma tidak manusiawi, maka Elen meminta bantuan kalian untuk membuat suatu program C yang dapat mengubah nama secara otomatis dan diletakkan pada direktori /home/[user]/modul2/gambar.
@@ -53,7 +105,34 @@ static void StripFileName(char *FileName, char *NewFileName)
     NewFileName[x] = '\0';
 }
 ```
-Fungsi ``` static void StripFileName(char *FileName, char *NewFileName) ``` digunakan untuk mengambil namafile tanpa ekstensi. 
+Fungsi ``` static void StripFileName``` digunakan untuk mendapatkan namafile tanpa ekstensi. 
+```
+static void StripEksName(char *FileName, char *NewFileName)
+{
+    int PLocation;
+    int i;
+    int x=0;
+    int j;
+
+    i = strlen(FileName) - 1;
+    j = strlen(FileName) - 1;
+    
+    while (i && FileName[i] != '.')
+    {
+        i--;
+    }
+    PLocation = i;
+
+    while (i <= j)
+    {
+        NewFileName[x] = FileName[i];
+        x++;
+        i++;
+    }
+    NewFileName[x] = '\0';
+}
+```
+Fungsi ```static void StripEksName``` digunakan untuk mendapatkan ekstensi file
 ```
 DIR *d;
 struct dirent *dir;
@@ -64,8 +143,8 @@ d = opendir("/home/ismail/Pictures/");
 inisialisasi variabel yang dibutuhkan.  
  ```while ((dir =  readdir(d)) !=  NULL)```  
 mengecek setiap file yang ada dalam folder ("/home/ismail/Pictures")  
-```ext =  strchr(fullname,'.');```  
-mendapatkan ekstensi dari nama file. string setelah titik akan diambil  
+``` if(dir->d_type  !=  4) ```
+mengecek apakah file atau direktori. jika file maka masuk ke dalam if.
 ``` if(strcmp(ekstensi, ".png") ==  0)```  
 mengecek apakah ekstensi dari file tersebut adalah ".png"  
 ```
@@ -192,16 +271,17 @@ Catatan:
 
 #### Penyelesaian
 ```
+char dir[50]="/home/ismail/Documents/makanan/";
 char nama[15]="makan_enak";
 char eks[5]=".txt";
 char namafile[30];
-char temp[30];
+char temp[60];
 char angka[10];
 struct stat filestat;
 ```
 inisialisasi variabel yang akan digunakan
 ```
-stat("makan_enak.txt",&filestat);
+stat("/home/ismail/sisop/SoalShift_modul2_B13/Soal4/makan_enak.txt",&filestat);
 ```
 mendapatkan status file "makan_enak.txt"
 ```
@@ -213,10 +293,10 @@ mendapatkan waktu saat ini
 int waktu =  difftime(timenow, filestat.st_atime);
 ```
 mendapatkan waktu(detik) file terakhir di akses
-```if(waktu <=  30)```
-mengecek apakah waktu terakhir diakses kurang dari 30 detik yang lalu
+```if(waktu <=  30 && waktu != 0)```
+mengecek apakah waktu terakhir diakses kurang dari 30 detik yang lalu dan difftimenya tidak nol (jika nol maka file yang akan dibuat 7)
 ``` sprintf(angka, "%d", i); ```
-mengubah tipe data integer menjadi string
+mengubah tipe data integer menjadi string dan menyimpannya dalam variabel angka
 ```
 strcpy(namafile, nama);
 strcat(namafile, angka);
@@ -243,3 +323,71 @@ Ket:
 b.  Buatlah program c untuk menghentikan program di atas.
     
 NB: Dilarang menggunakan crontab dan tidak memakai argumen ketika menjalankan program.
+
+#### Penyelesaian
+**Soal a**
+```
+time_t rawtime;
+struct tm *info;
+char nama[50];
+char dir[] = "/home/ismail/log/";
+char temp[50];
+char temp2[50];
+char log[] = "/log";
+char nomor[5];
+FILE *baca, *salin;
+```
+inisialisasi variabel yang akan digunakan
+```
+time(&rawtime);
+info =  localtime(&rawtime);
+```
+menyimpan waktu saat program berjalan
+```
+if(i%30==0)
+```
+mengecek apakah i telah terpenuhi sesuai syarat, jika terpenuhi menjalankan program yang ada didalamnya
+```
+sprintf(nama, "%02d:%02d:%d-%02d:%02d", info->tm_mday, info->tm_mon+1, info->tm_year+1900, info->tm_hour, info->tm_min);
+```
+menyusun nama folder sesuai format (dd:MM:yyyy-hh:mm) dari waktu yang telah didapatkan sebelumnya.
+```
+strcpy(temp, dir);
+strcat(temp, nama);
+mkdir(temp, 0777);
+```
+menggabungkan nama folder dengan direktori tempat folder akan dibuat dan membuat folder tersebut.
+```
+strcpy(temp2, temp);
+sprintf(nomor, "%d.log", (i%30)+1);
+strcat(log, nomor);
+strcat(temp2, log);
+```
+membuat nama file sesuai dengan format yaitu log#.log dimana # adalah urutan nomor file dan menggabungkannya dengan folder yang telah dibuat sebelumnya (full path)
+```
+baca =  fopen("/var/log/syslog", "r");
+```
+membuka file syslog
+```
+salin =  fopen(temp2, "w+");
+```
+membuat file sesuai dengan nama yang telah dibuat sebelumnya
+```
+char kar;
+
+while((kar=fgetc(baca))!=EOF)
+{
+	fputc(kar,salin);
+}
+```
+menyalin isi dari file syslog pada file yang baru dibuat
+
+**Soal b**
+```
+char  *argv[3] = {"killall", "Soal5", NULL};
+```
+mengisi argv dengan killall (perintah untuk mematikan proses (mengirim sinyal)) dan Soal5 adalah nama dari file yang akan dimatikan
+```
+execv("/usr/bin/killall", argv);
+```
+menjalankan argumen sebelumnya dengan execv
