@@ -143,8 +143,8 @@ d = opendir("/home/ismail/Pictures/");
 inisialisasi variabel yang dibutuhkan.  
  ```while ((dir =  readdir(d)) !=  NULL)```  
 mengecek setiap file yang ada dalam folder ("/home/ismail/Pictures")  
-``` if(dir->d_type  !=  4) ```
-mengecek apakah file atau direktori. jika file maka masuk ke dalam if.
+``` if(dir->d_type  !=  4) ```  
+mengecek apakah file atau direktori. jika file maka masuk ke dalam if  
 ``` if(strcmp(ekstensi, ".png") ==  0)```  
 mengecek apakah ekstensi dari file tersebut adalah ".png"  
 ```
@@ -292,11 +292,11 @@ mendapatkan waktu saat ini
 ```
 int waktu =  difftime(timenow, filestat.st_atime);
 ```
-mendapatkan waktu(detik) file terakhir di akses
-```if(waktu <=  30 && waktu != 0)```
-mengecek apakah waktu terakhir diakses kurang dari 30 detik yang lalu dan difftimenya tidak nol (jika nol maka file yang akan dibuat 7)
-``` sprintf(angka, "%d", i); ```
-mengubah tipe data integer menjadi string dan menyimpannya dalam variabel angka
+mendapatkan waktu(detik) file terakhir di akses  
+```if(waktu <=  30 && waktu != 0)```  
+mengecek apakah waktu terakhir diakses kurang dari 30 detik yang lalu dan difftimenya tidak nol (jika nol maka file yang akan dibuat 7)  
+``` sprintf(angka, "%d", i); ```  
+mengubah tipe data integer menjadi string dan menyimpannya dalam variabel angka  
 ```
 strcpy(namafile, nama);
 strcat(namafile, angka);

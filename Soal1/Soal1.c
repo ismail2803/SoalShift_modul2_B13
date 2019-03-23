@@ -51,6 +51,31 @@ static void StripFileName(char *FileName, char *NewFileName)
     NewFileName[x] = '\0';
 }
 
+static void StripEksName(char *FileName, char *NewFileName)
+{
+    int PLocation;
+    int i;
+    int x=0;
+    int j;
+
+    i = strlen(FileName) - 1;
+    j = strlen(FileName) - 1;
+    
+    while (i && FileName[i] != '.')
+    {
+        i--;
+    }
+    PLocation = i;
+
+    while (i <= j)
+    {
+        NewFileName[x] = FileName[i];
+        x++;
+        i++;
+    }
+    NewFileName[x] = '\0';
+}
+
 int main() {
     pid_t pid, sid;
     pid = fork();
@@ -88,31 +113,33 @@ int main() {
         if (d) {
             while ((dir = readdir(d)) != NULL) 
             {
-                char* ext;
-                char fullname[50];
-                char newname[50];
-                char grey[10] = "_grey";
-                strcpy(fullname, dir->d_name);
-                ext = strchr(fullname,'.');
-                char ekstensi[50];
-                strcpy(ekstensi, ext);
-                if(strcmp(ekstensi, ".png") == 0)
-                {
-                    StripFileName(fullname, newname);
-                    strcat(newname, grey);
-                    strcat(newname, ekstensi);
+                if(dir->d_type != 4){
+                    char fullname[50];
+                    char newname[50];
+                    char eksname[10];
+                    char grey[10] = "_grey";
+                    strcpy(fullname, dir->d_name);
+                    StripEksName(fullname, eksname);
+                    char ekstensi[50];
+                    strcpy(ekstensi, eksname);
+                    if(strcmp(ekstensi, ".png") == 0)
+                    {
+                        StripFileName(fullname, newname);
+                        strcat(newname, grey);
+                        strcat(newname, ekstensi);
 
-                    char foldertemp[100];
-                    
-                    strcpy(foldertemp, folder);
-                    strcat(foldertemp, newname);
-                    strcpy(newname, foldertemp);
+                        char foldertemp[100];
+                        
+                        strcpy(foldertemp, folder);
+                        strcat(foldertemp, newname);
+                        strcpy(newname, foldertemp);
 
-                    strcpy(foldertemp, folderl);
-                    strcat(foldertemp, fullname);
-                    strcpy(fullname, foldertemp);
+                        strcpy(foldertemp, folderl);
+                        strcat(foldertemp, fullname);
+                        strcpy(fullname, foldertemp);
 
-                    rename(fullname, newname);
+                        rename(fullname, newname);
+                    }
                 }
             }
             closedir(d);

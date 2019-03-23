@@ -40,29 +40,32 @@ int main() {
 
 	int i=1;
 	while(1) {
-		char nama[15]="makan_enak";
+		char dir[50] = "/home/ismail/Documents/makanan/";
+		char nama[15]="makan_sehat";
 		char eks[5]=".txt";
 		char namafile[30];
-		char temp[30];
+		char temp[60];
 		char angka[10];
 		struct stat filestat;
-		stat("makan_enak.txt",&filestat);
+		stat("/home/ismail/Documents/makanan/makan_enak.txt",&filestat);
 		time_t timenow;
 		time(&timenow);
 		int waktu = difftime(timenow, filestat.st_atime);
 
-		if(waktu <= 30)
+		if(waktu <= 30 && waktu != 0)
 		{
 			sprintf(angka, "%d", i);
 			strcpy(namafile, nama);
 			strcat(namafile, angka);
 			strcat(namafile, eks);
-			printf("%s", namafile);
+			strcpy(temp, dir);
+			strcat(temp, namafile);
 
 			FILE* fo;
 
-			fo = fopen (namafile, "w+");
+			fo = fopen (temp, "w+");
 			fclose(fo);
+			i++;
 		}
 		sleep(5);
 	}
